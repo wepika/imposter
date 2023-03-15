@@ -40,11 +40,6 @@
   "config": {
     "sort-packages": true
   },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.6.x-dev"
-    }
-  },
   "autoload": {
     "psr-4": {
       "TypistTech\\Imposter\\": "src"
