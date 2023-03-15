@@ -76,6 +76,9 @@ class Transformer implements TransformerInterface
      */
     private function prefixNamespace(string $targetFile)
     {
+        // In regex101 (works) : /(\s+)namespace\s+(?!(WpkLibraryUsage\\)|(Composer(\\|;))|(\\\"|\\'))(?=\S+\n)/
+        // In PHP (doesn't work) : /(\s+)%1$s\\s+(?!(%2$s)|(Composer(\\\\|;))|(\\\\\"|\\\\\'))(?=\S+\n)/
+
         $pattern = sprintf(
             '/(\s+)%1$s\\s+(?!(%2$s)|(Composer(\\\\|;))|(\\\\\"|\\\\\'))/',
             'namespace',
