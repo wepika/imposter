@@ -76,23 +76,14 @@ class Transformer implements TransformerInterface
      */
     private function prefixNamespace(string $targetFile)
     {
-        $regexes = [
-            // Will manage lines that ends with "namespace" to avoid merging 2 lines
+        $pattern = sprintf(
             '/(\s+)%1$s\\s+(?!(%2$s)|(Composer(\\\\|;))|(\\\\\"|\\\\\'))(?=\S*\n)/',
-            // The base regex
-            '/(\s+)%1$s\\s+(?!(%2$s)|(Composer(\\\\|;))|(\\\\\"|\\\\\'))/'
-        ];
+            'namespace',
+            $this->namespacePrefix
+        );
+        $replacement = sprintf('%1$s %2$s', '${1}namespace', $this->namespacePrefix);
 
-        foreach ($regexes as $regex) {
-            $pattern = sprintf(
-                $regex,
-                'namespace',
-                $this->namespacePrefix
-            );
-            $replacement = sprintf('%1$s %2$s', '${1}namespace', $this->namespacePrefix);
-
-            $this->replace($pattern, $replacement, $targetFile);
-        }
+        $this->replace($pattern, $replacement, $targetFile);
     }
 
     /**
