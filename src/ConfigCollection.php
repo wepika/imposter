@@ -30,6 +30,13 @@ class ConfigCollection implements ConfigCollectionInterface
             return $config->getAutoloads();
         }, $this->all());
 
+        // Add bin path
+        foreach ($this->all() as $libPath => $config) {
+            foreach ($config->getBin() as $binPath) {
+                $autoloads[] = $libPath . $binPath;
+            }
+        }
+
         return array_unique($autoloads);
     }
 

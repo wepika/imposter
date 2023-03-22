@@ -78,4 +78,9 @@ class Config implements ConfigInterface
     {
         return array_keys($this->get('require'));
     }
+
+    public function getBin()
+    {
+        return $this->get('bin');
+    }
 }

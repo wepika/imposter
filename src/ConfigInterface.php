@@ -17,4 +17,6 @@ interface ConfigInterface
      * @return string[]
      */
     public function getRequires(): array;
+
+    public function getBin();
 }
