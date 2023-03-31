@@ -65,6 +65,58 @@ class Transformer implements TransformerInterface
         $this->prefixUseConst($targetFile);
         $this->prefixUseFunction($targetFile);
         $this->prefixUse($targetFile);
+
+        if ($this->isComposerJson($targetFile)) {
+            $this->prefixComposerJson($targetFile);
+        }
+    }
+
+    /**
+     * @param string $targetFile
+     * @return void
+     */
+    private function prefixComposerJson(string $targetFile)
+    {
+        $content = $this->filesystem->get($targetFile);
+        $arrayContent = json_decode($content, true);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            return;
+        }
+
+        if (
+            !isset($arrayContent['autoload'])
+            && !isset($arrayContent['autoload']['psr-4'])
+        ) {
+            return;
+        }
+
+        $autoload = $arrayContent['autoload']['psr-4'];
+
+        if (!is_array($autoload)) {
+            return;
+        }
+
+        $newAutoload = [];
+
+        foreach ($autoload as $namespace => $item) {
+            $newAutoload[str_replace('\\\\', '\\', $this->namespacePrefix) . $namespace] = $item;
+        }
+
+        $arrayContent['autoload']['psr-4'] = $newAutoload;
+
+        $newContent = json_encode($arrayContent, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+
+        $this->filesystem->put($targetFile, $newContent);
+    }
+
+    /**
+     * @param string $targetFile
+     * @return bool
+     */
+    private function isComposerJson(string $targetFile)
+    {
+        return strpos($targetFile, 'composer.json') !== false;
     }
 
     /**
