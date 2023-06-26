@@ -77,7 +77,7 @@ class Transformer implements TransformerInterface
     private function prefixNamespace(string $targetFile)
     {
         $pattern = sprintf(
-            '/(\s+)%1$s\\s+(?!(%2$s)|(Composer(\\\\|;))|(\\\\\"|\\\\\'))(?=\S*\n)/',
+            '/(\s*)%1$s\s+(?!(%2$s)|(Composer(\\\\|;))|(\\\\\"|\\\\\'))(?=\S*\r?\n)/',
             'namespace',
             $this->namespacePrefix
         );
